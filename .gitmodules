@@ -1,0 +1,3 @@
+[submodule "SpringBoot"]
+	path = SpringBoot
+	url = https://github.com/ChrisPrince12/SimpleLogin.git
