@@ -1,4 +1,4 @@
-<nav class="navbar p-2 navbar-expand-sm navbar-dark bg-dark">
+<nav class="navbar p-2 mb-2 navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" routerLink="/login">RealTech</a>
     <!-- <button
@@ -15,31 +15,19 @@
   </div>
 
   <div *ngIf="isLogin">
-    <div class="text-white">
-      Profile
-      <button class="btn btn-primary rounded-circle profile">
-        <span class="fs-5">P</span>
+    <div class="d-grid gap-2 d-md-block">
+      <button
+        class="btn btn-sm btn-primary mx-1"
+        type="button"
+        aria-expanded="false"
+      >
+        Profile <i class="bi bi-person"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-danger" (click)="logout()">
+        Logout
+        <i class="bi bi-box-arrow-right"></i>
       </button>
     </div>
-
-    <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        Profile
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-        <li>
-          <a class="dropdown-item" href="#">Profile Picture</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Update Password</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Logout</a>
-        </li>
-      </ul>
-    </div>
-    
   </div>
 </nav>
-
 <router-outlet></router-outlet>

@@ -13,7 +13,7 @@ export class DashboardComponent {
 
   public isLogin:boolean=false
   allUser: Array<User> = []
-  constructor(private authService: AuthenticationService,private registrationService: RegistrationService, private router: Router){}
+  constructor(private authService: AuthenticationService,private registrationService: RegistrationService){}
 
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe(
@@ -31,11 +31,6 @@ public getAllUser(): void{
       console.log(response)
     }
    )
-}
-
-logout(): void{
-  this.router.navigate(['/login']);
-  this.authService.logout();
 }
 
 }
