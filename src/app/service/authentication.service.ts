@@ -19,6 +19,10 @@ export class AuthenticationService {
     });
   }
 
+  fetchUserData(userId: number): Observable<any>{
+    return this.http.get<any>(`${this.springUrl}/auth/${userId}`);
+  }
+
   public setIsAuthenticated(isAuthenticated: boolean): void {
     this.isAuthenticatedSubject.next(isAuthenticated);
   }
@@ -26,5 +30,5 @@ export class AuthenticationService {
   logout(): void {
     this.setIsAuthenticated(false);
   }
-  
+
 }

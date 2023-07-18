@@ -41,17 +41,24 @@ export class LoginComponent implements OnInit {
     console.log('Username: ', email);
     console.log('Password: ', password);
 
-    this.authService.login(email, password).subscribe((data) => {
-      if (HttpStatusCode.Ok) {
-        const isAuthenticated = true
-        this.authService.setIsAuthenticated(isAuthenticated)
-        //Clear The Form Data
-        this.loginForm.reset();
-        this.router.navigateByUrl('/home');
+    this.authService.login(email, password).subscribe(
+      (userId: number) => {
+        if (userId) {
+          const isAuthenticated = true;
+          this.authService.setIsAuthenticated(isAuthenticated);
+          //Clear The Form Data
+          this.loginForm.reset();
+
+          //Using User Id To Fetch Data
+          this.authService.fetchUserData(userId).subscribe((userData) => {
+            console.log('User Logged In: ', userData);
+            this.router.navigateByUrl('/home');
+          });
+        }
+      },
+      (error) => {
+        console.log('Invalid Username/Password');
       }
-    },
-    (error) => {
-      console.log("Invalid Username/Password");
-    });
+    );
   }
 }

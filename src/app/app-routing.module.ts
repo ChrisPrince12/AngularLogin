@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'home', component: DashboardComponent},
   { path: 'login', component: LoginComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
   { path: '**', component: PageNotFoundComponent}
 ];
