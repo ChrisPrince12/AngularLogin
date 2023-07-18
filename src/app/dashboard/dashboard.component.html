@@ -1,0 +1,39 @@
+<div *ngIf="isLogin;">
+<div class="container">
+  <div class="d-flex justify-content-between p-1">
+    <div>
+      <h2>Welcome To The System</h2>
+    </div>
+    <div>
+      <button class="btn btn-danger" (click)="logout()">Logout</button>
+    </div>
+  </div>
+  <hr>
+  <h2>List Of Registered User</h2>
+  <table class="table table-responsive table-bordered ">
+    <thead class="table-primary">
+      <tr>
+      <th>S/N</th>
+      <th>FirstName</th>
+      <th>SecondName</th>
+      <th>Email</th>
+      <th>gender</th>
+      <th>Phone Number</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of allUser; let index=index">
+        <td>{{ index + 1 }}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.gender}}</td>
+        <td>{{user.mobile}}</td>
+        <td>{{user.address}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+

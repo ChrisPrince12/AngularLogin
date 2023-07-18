@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <div class="card-body">
+          <h2 class="card-title text-center bgcustom1">Create your account</h2>
+          <hr/>
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="firstName" class="form-label bgcustom">First Name<span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                placeholder="Enter your first name"
+                formControlName="firstName"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label bgcustom">Last Name<span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                placeholder="Enter your last name"
+                formControlName="lastName"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label bgcustom">Password<span class="text-danger">*</span></label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                formControlName="password"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="gender" class="form-label bgcustom">Gender<span class="text-danger">*</span></label>
+              <select class="form-control" id="gender" formControlName="gender">
+                <option value="" disabled selected>Select your gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="birthdate" class="form-label bgcustom">Birthdate<span class="text-danger">*</span></label>
+              <input
+                type="date"
+                class="form-control"
+                id="birthdate"
+                formControlName="birthdate"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label bgcustom">Address</label>
+              <textarea
+                class="form-control"
+                id="address"
+                rows="3"
+                formControlName="address"
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label bgcustom">Email<span class="text-danger">*</span></label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                autocomplete="username"
+                placeholder="Enter your email"
+                formControlName="email"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="mobile" class="form-label bgcustom">Mobile</label>
+              <input
+                type="text"
+                class="form-control"
+                id="mobile"
+                placeholder="Enter your mobile number"
+                formControlName="mobile"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-100 btn btn-md btn-primary mt-2"
+              [disabled]="registerForm.invalid"
+            >
+              Register
+            </button>
+            <p class="text-center m-2">
+              Already have an account?
+              <a routerLink="/login">Sign in</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

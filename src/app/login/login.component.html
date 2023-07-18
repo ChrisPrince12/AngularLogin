@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="card shadow p-4">
+        <div class="card-body">
+          <h2 class="card-title bgcustom1 text-center mb-2">
+            Log in to your account
+          </h2>
+          <hr />
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label bgcustom"
+                >Email<span class="text-danger">*</span></label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Enter your Email"
+                autocomplete="username"
+                formControlName="email"
+              />
+              <div
+                *ngIf="
+                  formControls.email.invalid &&
+                  (formControls.email.dirty || formControls.email.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="formControls.email.errors.required">
+                  Email is required
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label bgcustom"
+                >Password<span class="text-danger">*</span></label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                formControlName="password"
+              />
+              <div
+                *ngIf="
+                  formControls.password.invalid &&
+                  (formControls.password.dirty || formControls.password.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="formControls.password.errors.required">
+                  Password is required
+                </div>
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="w-100 btn btn-md btn-primary mt-2"
+              [disabled]="loginForm.invalid"
+            >
+              Login
+            </button>
+            <p class="text-center m-2">
+              Do not have an account?
+              <a routerLink="/register">Register here</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
