@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
 import { HttpStatusCode } from '@angular/common/http';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-login',
@@ -47,12 +48,14 @@ export class LoginComponent implements OnInit {
           const isAuthenticated = true;
           this.authService.setIsAuthenticated(isAuthenticated);
           //Clear The Form Data
+
           this.loginForm.reset();
 
           //Using User Id To Fetch Data
-          this.authService.fetchUserData(userId).subscribe((userData) => {
-            console.log('User Logged In: ', userData);
-            this.router.navigateByUrl('/home');
+          this.authService.fetchUserData(userId).subscribe((data: User) => {
+            this.authService.setUserData(data);
+            console.log(data);
+            this.router.navigateByUrl('/dashboard');
           });
         }
       },

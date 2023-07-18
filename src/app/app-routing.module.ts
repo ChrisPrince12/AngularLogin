@@ -9,11 +9,12 @@ import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'home', component: DashboardComponent},
+  {
+    path: 'dashboard', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', component: PageNotFoundComponent}
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
