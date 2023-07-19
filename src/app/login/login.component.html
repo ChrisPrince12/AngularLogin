@@ -1,12 +1,12 @@
 <div class="container">
   <div class="row justify-content-center mt-5">
-   
-    <div class="col-md-6">
-      <div class="card shadow p-4">
+
+    <div class="col-md-5">
+      <div class="card shadow py-2 px-4">
         <div class="card-body">
           <div *ngIf="registrationSuccessfully">
             <div class="alert alert-success text-sm alert-dismissible fade text-center show" role="alert">
-               Registration Successfully 
+              Registration Successfully
             </div>
           </div>
           <h2 class="card-title bgcustom1 text-center mb-2">
@@ -28,18 +28,24 @@
               </div>
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label bgcustom">Password<span class="text-danger">*</span></label>
-              <input type="password" class="form-control" id="password" autocomplete="current-password"
-                placeholder="Enter your password" formControlName="password" (focus)="hideAlert()" />
-              <div *ngIf="
+              <div class="form-group">
+                <label for="password" class="form-label bgcustom">Password<span class="text-danger">*</span></label>
+                <div class="input-group">
+                <input class="form-control" id="password" autocomplete="current-password"
+                  placeholder="Enter your password" formControlName="password" (focus)="hideAlert()"  type="{{ showPassword ? 'text' : 'password' }}" />
+                <span class="input-group-text toggle-password bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"
+                  (click)="togglePasswordVisibility()"></span>
+                </div>
+                <div *ngIf="
                   formControls.password.invalid &&
                   (formControls.password.dirty || formControls.password.touched)
                 " class="text-danger">
-                <div *ngIf="formControls.password.errors.required">
-                  Password is required
+                  <div *ngIf="formControls.password.errors.required">
+                    Password is required
+                  </div>
                 </div>
               </div>
-            </div>
+              </div>
 
             <div *ngIf="loginError" class="d-flex align-items-center justify-content-center">
               <div class="alert alert-danger text-sm alert-dismissible fade text-center show" role="alert">
@@ -51,7 +57,7 @@
             <button type="submit" class="w-100 btn btn-md btn-primary mt-2" [disabled]="loginForm.invalid">
               Login
             </button>
-            <p class="text-center m-2">
+            <p class="text-center mt-1">
               Do not have an account?
               <a routerLink="/register">Register here</a>
             </p>

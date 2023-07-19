@@ -3,4 +3,10 @@
   height: auto;
   object-fit: cover;
 }
-
+.input-group-text{
+  background-color: #fff;
+  border-left: none;
+}
+.input-group input {
+border-right: none;
+}

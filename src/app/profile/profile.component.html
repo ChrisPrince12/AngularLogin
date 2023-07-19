@@ -90,7 +90,7 @@
               </div>
               <div class="col-md-6">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" formControlName="email" [disabled]="editMode" />
+                <input type="email" class="form-control" id="email" formControlName="email" aria-label="readonly" readonly />
               </div>
               <div class="col-md-6">
                 <label for="gender">Gender</label>
@@ -132,19 +132,28 @@
 
         <form [formGroup]="passwordChangeForm" (ngSubmit)="onSubmit()" class="row g-3">
           <div class="col-md-4">
+            <div class="form-group">
             <label for="currentPassword">Current Password</label>
-            <input type="password" class="form-control" autocomplete="current-password" id="currentPassword"
+            <div class="input-group">
+            <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" autocomplete="current-password" id="currentPassword"
               formControlName="currentPassword" placeholder="Enter current password" />
+              <span class="input-group-text toggle-password bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"
+              (click)="togglePasswordVisibility()"></span>
+            </div>
             <div *ngIf="currentPassword.touched && currentPassword.errors">
               <div *ngIf="currentPassword.errors.required" class="text-danger">
                 Current Password is required.
               </div>
             </div>
+            </div>
           </div>
           <div class="col-md-4">
+            <div class="form-group">
             <label for="newPassword">New Password</label>
-            <input type="password" class="form-control" autocomplete="new-password" id="newPassword"
+            
+            <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" autocomplete="new-password" id="newPassword"
               formControlName="newPassword" placeholder="Enter new password" />
+              
             <div *ngIf="newPassword.touched && newPassword.errors" class="text-danger">
               <div *ngIf="newPassword.errors.required" class="text-danger">
                 New Password is required.
@@ -153,11 +162,17 @@
                 New Password must be at least 6 characters long.
               </div>
             </div>
+            </div>
           </div>
           <div class="col-md-4">
+            <div class="form-group">
             <label for="confirmPassword">Confirm Password</label>
-            <input type="password" autocomplete="new-password" class="form-control" id="confirmPassword"
+            <div class="input-group">
+            <input type="{{ showPassword ? 'text' : 'password' }}" autocomplete="new-password" class="form-control" id="confirmPassword"
               formControlName="confirmPassword" placeholder="Confirm new password" />
+              <span class="input-group-text toggle-password bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"
+              (click)="togglePasswordVisibility()"></span>
+            </div>
             <div *ngIf="confirmPassword.touched && confirmPassword.errors">
               <div *ngIf="confirmPassword.errors.required" class="text-danger">
                 Confirm Password is required.
@@ -168,6 +183,7 @@
               <div *ngIf="passwordMismatch" class="text-danger">
                 Passwords do not match.
               </div>
+            </div>
             </div>
           </div>
           <button type="submit" class="btn btn-primary" [disabled]="passwordChangeForm.invalid">

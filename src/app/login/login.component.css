@@ -20,11 +20,18 @@
     width: 100%;
     padding: 10px;
     font-size: 14px;
-    height: 30px;
+    height: 40%;
     color: #fff;
     background-color: rgb(2, 163, 109);
     border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.input-group-text{
+    background-color: #fff;
+    border-left: none;
+}
+.input-group input {
+border-right: none;
 }

@@ -4,101 +4,161 @@
       <div class="card shadow p-4">
         <div class="card-body">
           <h2 class="card-title text-center bgcustom1">Create your account</h2>
-          <hr/>
+          <hr />
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="row">
-            <div class="col-md-6">
-              <label for="firstName" class="form-label p-1 bgcustom">First Name<span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="firstName"
-                placeholder="Enter your first name"
-                formControlName="firstName"
-              />
+              <div class="col-md-6">
+                <label for="firstName" class="form-label p-1 bgcustom"
+                  >First Name<span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  placeholder="Enter your first name"
+                  formControlName="firstName"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label p-1 bgcustom"
+                  >Last Name<span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  placeholder="Enter your last name"
+                  formControlName="lastName"
+                />
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="password" class="form-label p-1 bgcustom"
+                    >Password<span class="text-danger">*</span></label
+                  >
+                  <div class="input-group">
+                    <input
+                      type="{{ showPassword ? 'text' : 'password' }}"
+                      class="form-control"
+                      id="password"
+                      autocomplete="current-password"
+                      placeholder="Enter your password"
+                      formControlName="password"
+                      [ngClass]="{
+                        'is-invalid': formControls.password.invalid && (formControls.password.dirty || formControls.password.touched),
+                        'less-than-six': formControls.password.value && formControls.password.value.length < 6
+                      }"
+                      (keyup)="checkPasswordValidity()"
+                      data-toggle="tooltip"
+                      data-placement="right"
+                      title="Password must be at least six characters"
+                    />
+                    <span
+                      class="input-group-text toggle-password bi"
+                      [class.bi-eye-fill]="!showPassword"
+                      [class.bi-eye-slash-fill]="showPassword"
+                      (click)="togglePasswordVisibility()"
+                    ></span>
+                    <div *ngIf="formControls.password.invalid && (formControls.password.dirty || formControls.password.touched)" class="invalid-feedback">
+                      <div *ngIf="formControls.password.errors?.required">Password is required</div>
+                      <div *ngIf="formControls.password.errors?.pattern">Password cannot start or contain space</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="gender" class="form-label p-1 bgcustom"
+                  >Gender<span class="text-danger">*</span></label
+                >
+                <select
+                  class="form-control"
+                  id="gender"
+                  formControlName="gender"
+                >
+                  <option value="" disabled selected>Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="birthdate" class="form-label p-1 bgcustom"
+                  >Birthdate<span class="text-danger">*</span></label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  id="birthdate"
+                  formControlName="birthdate"
+                />
+                <div *ngIf="formControls.birthdate.invalid && (formControls.birthdate.dirty || formControls.birthdate.touched)" class="text-danger text-sm">
+                  <div *ngIf="formControls.birthdate.errors?.required">Birthdate is required</div>
+                  <div *ngIf="formControls.birthdate.errors?.invalidBirthdate">Birthdate cannot be today or a future date</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label p-1 bgcustom"
+                  >Email<span class="text-danger">*</span></label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  autocomplete="username"
+                  placeholder="Enter your email"
+                  formControlName="email"
+                  [ngClass]="{ 'is-invalid': isEmailTaken }"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="This Email is already taken"
+                />
+                <div class="invalid-feedback" *ngIf="isEmailTaken">
+                  This Email is already taken
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="mobile" class="form-label p-1 bgcustom"
+                  >Mobile</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  formControlName="mobile"
+                  [ngClass]="{
+                    'is-invalid': formControls.mobile.invalid && (formControls.mobile.dirty || formControls.mobile.touched)
+                  }"
+                  data-toggle="tooltip"
+                  data-placement="right"
+                  title="Invalid phone number format. Please use a valid phone number."
+                />
+                <div *ngIf="formControls.mobile.invalid && (formControls.mobile.dirty || formControls.mobile.touched)" class="invalid-feedback">
+                  <div *ngIf="formControls.mobile.errors?.required">Phone number is required</div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="address" class="form-label p-1 bgcustom"
+                  >Address</label
+                >
+                <textarea
+                  class="form-control"
+                  id="address"
+                  rows="3"
+                  formControlName="address"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-80 btn btn-md btn-primary mt-2"
+                [disabled]="registerForm.invalid"
+              >
+                Register
+              </button>
+              <p class="text-center m-2">
+                Already have an account?
+                <a routerLink="/login">Sign in</a>
+              </p>
             </div>
-            <div class="col-md-6">
-              <label for="lastName" class="form-label p-1 bgcustom">Last Name<span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                id="lastName"
-                placeholder="Enter your last name"
-                formControlName="lastName"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="password" class="form-label p-1 bgcustom">Password<span class="text-danger">*</span></label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                autocomplete="current-password"
-                placeholder="Enter your password"
-                formControlName="password"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="gender" class="form-label p-1 bgcustom">Gender<span class="text-danger">*</span></label>
-              <select class="form-control" id="gender" formControlName="gender">
-                <option value="" disabled selected>Select your gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label for="birthdate" class="form-label p-1 bgcustom">Birthdate<span class="text-danger">*</span></label>
-              <input
-                type="date"
-                class="form-control"
-                id="birthdate"
-                formControlName="birthdate"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="email" class="form-label p-1 bgcustom">Email<span class="text-danger">*</span></label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                autocomplete="username"
-                placeholder="Enter your email"
-                formControlName="email"
-                [ngClass]="{ 'is-invalid': isEmailTaken }" data-toggle="tooltip" data-placement="top" title="This Email is already taken"
-              />
-              <div class="invalid-feedback" *ngIf="isEmailTaken">This Email is already taken</div>
-            </div>
-            <div class="col-md-12">
-              <label for="mobile" class="form-label p-1 bgcustom">Mobile</label>
-              <input
-                type="text"
-                class="form-control"
-                id="mobile"
-                placeholder="Enter your mobile number"
-                formControlName="mobile"
-              />
-            </div>
-            <div class="col-md-12">
-              <label for="address" class="form-label p-1 bgcustom">Address</label>
-              <textarea
-                class="form-control"
-                id="address"
-                rows="3"
-                formControlName="address"
-              ></textarea>
-            </div>
-            <button
-              type="submit"
-              class="w-80 btn btn-md btn-primary mt-2"
-              [disabled]="registerForm.invalid"
-            >
-              Register
-            </button>
-            <p class="text-center m-2">
-              Already have an account?
-              <a routerLink="/login">Sign in</a>
-            </p>
-          </div>
           </form>
         </div>
       </div>

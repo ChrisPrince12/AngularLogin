@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   loginError : boolean = false;
   showRegisterAlert: boolean = false;
   registrationSuccessfully: boolean = false;
+  showPassword: boolean = false;
 
   @ViewChild('emailField') emailField : ElementRef | undefined
 
@@ -52,17 +53,12 @@ export class LoginComponent implements OnInit {
     this.loginError = false;
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-
-    console.log('Username: ', email);
-    console.log('Password: ', password);
-
     this.authService.login(email, password).subscribe(
       (userId: number) => {
         if (userId) {
           const isAuthenticated = true;
           this.authService.setIsAuthenticated(isAuthenticated);
           //Clear The Form Data
-
           this.loginForm.reset();
     
           //Using User Id To Fetch Data
@@ -88,4 +84,9 @@ export class LoginComponent implements OnInit {
   hideAlert(){
     this.loginError = false
   }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
 }

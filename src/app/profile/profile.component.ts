@@ -22,6 +22,7 @@ export class ProfileComponent {
   userId: number | undefined
   passwordMismatch = false;
   profileForm: any;
+  showPassword: boolean = false;
   private springUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient,private authService: AuthenticationService,private formBuilder: FormBuilder,private router: Router,private datePipe: DatePipe){}
@@ -238,4 +239,8 @@ export class ProfileComponent {
   }
   
   //End Of Handling Profile Picture
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 }
