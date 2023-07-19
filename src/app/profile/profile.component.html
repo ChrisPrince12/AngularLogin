@@ -1,62 +1,180 @@
 <div *ngIf="isLogin">
-<div class="container p-4">
-  <div class="row g-2">
-    <div class="col-md-4">
-      <div class="card p-2 shadow align-items-center">
-        <svg
-          class="card-img-top profile-picture"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="#555"
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM6 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zm4-2c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm4.75 4h-1.27l.01-.01C14.92 13.48 15 12.75 15 12c0-1.97-2.03-3.5-4.5-3.5S6 10.03 6 12c0 .75.08 1.48.23 2.09l.01.01H4.25C3.56 14 3 13.44 3 12.75V12c0-3.04 2.46-5.5 5.5-5.5S14 8.96 14 12v.75c0 .69-.56 1.25-1.25 1.25z"
-          />
-        </svg>
+  <div class="container p-4">
+    <div class="row g-2">
+      <div class="col-md-4">
+        <div class="card shadow align-items-center">
+          <div *ngIf="!profilePicture">
+            <svg class="card-img-top profile-picture" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <circle fill="#555" cx="12" cy="12" r="10" />
+              <text x="50%" y="65%" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+          </svg>
+          
+          </div>
 
-        <div class="edit-overlay">
+          <div *ngIf="profilePicture">
+            <img class="card-img-top profile-picture" [src]="profilePicture" alt="profile-picture" />
+          </div>
+
+          <!-- <div class="edit-overlay">
             <label for="upload-input">
-               <div class="btn btn-sm btn-secondary">Change Image <i class="bi bi-image-alt"></i></div>
+              <div class="btn btn-sm btn-outline-secondary my-2">
+                Change Image<i class="bi bi-image-alt"></i>
+              </div>
             </label>
-            <input type="file" id="upload-input" class="visually-hidden">
-          </div>
-          <div>
-              <div class="btn btn-success"></div>
-          </div>
-        
-      </div>
-    </div>
+            <input type="file" id="upload-input" class="" accept="image/*" (change)="onFileSelected($event)" />
+            // visually-hidden 
+            <button class="btn btn-sm btn-success" (click)="uploadProfilePicture()" disabled>
+              <i class="bi bi-check"></i>
+            </button>
+          </div> -->
 
-    <div class="col-md-8">
-      <div class="card shadow p-4">
-        <h3>Profile Details</h3>
-        <hr>
-        <div class="row">
-            <div class="col-md-6" *ngIf="userData">
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card shadow p-4">
+          <div *ngIf="!editMode">
+            <h3>Profile Details</h3>
+            <hr />
+            <div class="row">
+              <div class="col-md-6" *ngIf="userData">
                 <h5 class="card-title">Full Name</h5>
-                <p class="card-text">{{ userData.firstName }} {{ userData.lastName }}</p>
+                <p class="card-text">
+                  {{ userData.firstName }} {{ userData.lastName }}
+                </p>
                 <h5 class="card-title">Birthdate</h5>
                 <p class="card-text">{{ userData.birthdate }}</p>
                 <h5 class="card-title">Mobile</h5>
                 <p class="card-text">{{ userData.mobile }}</p>
-            </div>
-            <div class="col-md-6">
+              </div>
+              <div class="col-md-6">
                 <h5 class="card-title">Email</h5>
                 <p class="card-text">{{ userData?.email }}</p>
                 <h5 class="card-title">Gender</h5>
                 <p class="card-text">{{ userData?.gender }}</p>
                 <h5 class="card-title">Address</h5>
                 <p class="card-text">{{ userData?.address }}</p>
+              </div>
             </div>
-        </div>
-        <div class="d-grid gap-2 pt-2">
-            <button class="btn btn-primary" type="button">Update Profile<i class="bi bi-pencil-square"></i></button>
+            <div class="d-grid gap-2 pt-2">
+              <button class="btn btn-primary" type="button" (click)="toggleEditMode()">
+                Update Profile<i class="bi bi-pencil-square"></i>
+              </button>
+            </div>
           </div>
-          
+
+          <div *ngIf="editMode">
+            <!-- Display the edit form -->
+            <h3>Update Profile</h3>
+            <hr />
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="row g-3">
+              <div class="col-md-6">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" formControlName="firstName" required />
+                <div *ngIf="
+                    profileForm.get('firstName').invalid &&
+                    profileForm.get('firstName').touched
+                  " class="text-danger">
+                  First Name is required.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" formControlName="lastName" required />
+                <div *ngIf="
+                    profileForm.get('lastName').invalid &&
+                    profileForm.get('lastName').touched
+                  " class="text-danger">
+                  Last Name is required.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" formControlName="email" [disabled]="editMode" />
+              </div>
+              <div class="col-md-6">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender" formControlName="gender">
+                  <option value="" disabled selected>Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="birthdate">Birthdate</label>
+                <input type="date" class="form-control" id="birthdate" formControlName="birthdate" />
+              </div>
+              <div class="col-md-6">
+                <label for="mobile">Mobile</label>
+                <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile number"
+                  formControlName="mobile" />
+              </div>
+              <div class="col-md-12">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" rows="3" formControlName="address"></textarea>
+              </div>
+              <div class="m-2 d-flex justify-content-center">
+                <!-- In Case [disabled]="profileForm.invalid" -->
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
 
-    
-     
+      <div class="card shadow p-4 my-2">
+        <h4>Change Your Password</h4>
+
+        <form [formGroup]="passwordChangeForm" (ngSubmit)="onSubmit()" class="row g-3">
+          <div class="col-md-4">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" class="form-control" autocomplete="current-password" id="currentPassword"
+              formControlName="currentPassword" placeholder="Enter current password" />
+            <div *ngIf="currentPassword.touched && currentPassword.errors">
+              <div *ngIf="currentPassword.errors.required" class="text-danger">
+                Current Password is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="newPassword">New Password</label>
+            <input type="password" class="form-control" autocomplete="new-password" id="newPassword"
+              formControlName="newPassword" placeholder="Enter new password" />
+            <div *ngIf="newPassword.touched && newPassword.errors" class="text-danger">
+              <div *ngIf="newPassword.errors.required" class="text-danger">
+                New Password is required.
+              </div>
+              <div *ngIf="newPassword.errors.minlength" class="text-danger">
+                New Password must be at least 6 characters long.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" autocomplete="new-password" class="form-control" id="confirmPassword"
+              formControlName="confirmPassword" placeholder="Confirm new password" />
+            <div *ngIf="confirmPassword.touched && confirmPassword.errors">
+              <div *ngIf="confirmPassword.errors.required" class="text-danger">
+                Confirm Password is required.
+              </div>
+              <div *ngIf="confirmPassword.errors.minlength" class="text-danger">
+                Confirm Password must be at least 6 characters long.
+              </div>
+              <div *ngIf="passwordMismatch" class="text-danger">
+                Passwords do not match.
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="passwordChangeForm.invalid">
+            Change Password
+          </button>
+        </form>
+      </div>
     </div>
   </div>
-</div></div>
+</div>

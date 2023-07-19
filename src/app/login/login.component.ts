@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { AuthenticationService } from '../service/authentication.service';
-import { HttpStatusCode } from '@angular/common/http';
 import { User } from '../model/user.model';
 
 @Component({
@@ -12,10 +11,17 @@ import { User } from '../model/user.model';
 })
 export class LoginComponent implements OnInit {
   loginForm: any;
+  errorMessage: string = "";
+  loginError : boolean = false;
+  showRegisterAlert: boolean = false;
+  registrationSuccessfully: boolean = false;
+
+  @ViewChild('emailField') emailField : ElementRef | undefined
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthenticationService
   ) {}
 
@@ -25,6 +31,12 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
+
+    this.route.queryParams.subscribe(
+      (params: Params) => {
+        this.registrationSuccessfully = params['registrationSuccessfully'] === 'true'
+      }
+    )
   }
 
   get formControls() {
@@ -36,6 +48,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
+
+    this.loginError = false;
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
@@ -50,18 +64,28 @@ export class LoginComponent implements OnInit {
           //Clear The Form Data
 
           this.loginForm.reset();
-
+    
           //Using User Id To Fetch Data
           this.authService.fetchUserData(userId).subscribe((data: User) => {
             this.authService.setUserData(data);
-            console.log(data);
             this.router.navigateByUrl('/dashboard');
           });
         }
       },
       (error) => {
-        console.log('Invalid Username/Password');
+        this.loginError = true;
+        this.loginForm.reset();
+        // this.focusOnEmail();
+        this.errorMessage = "Invalid Username/Password";
       }
     );
+  }
+
+  focusOnEmail(){
+    this.emailField?.nativeElement.focus();
+  }
+
+  hideAlert(){
+    this.loginError = false
   }
 }

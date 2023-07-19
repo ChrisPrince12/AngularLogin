@@ -9,7 +9,8 @@ import { User } from '../model/user.model';
 export class AuthenticationService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-  private userDataSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private userDataSubject: BehaviorSubject<User | null> =
+    new BehaviorSubject<User | null>(null);
   private springUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) {}
@@ -21,12 +22,27 @@ export class AuthenticationService {
     });
   }
 
-  fetchUserData(userId: number): Observable<any>{
+  updatePassword(
+    userEmail: string,
+    currentPassword: string,
+    newPassword: string
+  ): Observable<any> {
+    return this.http.put<any>(
+      `${this.springUrl}/auth/update-password`,
+      { userEmail, currentPassword, newPassword }
+    );
+  }
+
+  fetchUserData(userId: number): Observable<any> {
     return this.http.get<any>(`${this.springUrl}/auth/${userId}`);
   }
 
-  setUserData(data: User): void{
-    this.userDataSubject.next(data)
+  fetchUserByEmail(userEmail: string): Observable<any>{
+    return this.http.get<any>(`${this.springUrl}/auth/email/${userEmail}`);
+  }
+
+  setUserData(data: User): void {
+    this.userDataSubject.next(data);
   }
 
   getUserData(): Observable<User | null> {
@@ -37,8 +53,12 @@ export class AuthenticationService {
     this.isAuthenticatedSubject.next(isAuthenticated);
   }
 
+
+  updateUser(user: User): Observable<any> {
+    return this.http.put<any>(`${this.springUrl}/auth/update-user`, user);
+  }
+
   logout(): void {
     this.setIsAuthenticated(false);
   }
-
 }

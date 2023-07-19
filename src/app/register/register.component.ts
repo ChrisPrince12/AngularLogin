@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../model/user.model';
 import { RegistrationService } from '../service/registration.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +12,9 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   registerForm: any;
+  isEmailTaken: boolean = false
+
+  @ViewChild('emailField') emailField : ElementRef | undefined
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,17 +50,18 @@ export class RegisterComponent implements OnInit {
     const user: User = this.registerForm.value;
     console.log('Form Data: ', user);
 
-
-
     this.registerService.register(user).subscribe((response) => {
-      console.log('Registration Successfully');
-
+    
       // Clear the form
       this.registerForm.reset();
-      
-      this.router.navigateByUrl('/login');
+      this.router.navigate(['/login'], { queryParams: { registrationSuccessfully: true } });
     },
     error=> {
+      if(error instanceof HttpErrorResponse){
+        if(error.error == "Email Already Exist"){
+          this.isEmailTaken = true
+        }
+      }
       console.error('Registration Fail', error);
     });
   }

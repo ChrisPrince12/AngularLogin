@@ -12,15 +12,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DashboardComponent {
   public isLogin: boolean = false;
   allUser: Array<User> = [];
+  showSuccessAlert: boolean = false
 
   constructor(
     private authService: AuthenticationService,
     private registrationService: RegistrationService
   ) {}
 
+ 
+
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       this.isLogin = isAuthenticated;
+      this.showSuccessAlert = true
+      setTimeout(()=>{
+        this.showSuccessAlert = false
+      },4000)
     });
     this.getAllUser();
   }
@@ -28,7 +35,6 @@ export class DashboardComponent {
   public getAllUser(): void {
     this.registrationService.getAllUser().subscribe((response: User[]) => {
       this.allUser = response;
-      console.log(response);
     });
   }
 }

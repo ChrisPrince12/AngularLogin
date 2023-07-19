@@ -4,6 +4,11 @@
     <div>
       <h2>Welcome To The System</h2>
     </div>
+    <div *ngIf="showSuccessAlert">
+      <div class="alert alert-success text-sm alert-dismissible fade text-center show" role="alert">
+         Login Successfully 
+      </div>
+    </div>
   </div>
   <hr>
   <h4>Registered User</h4>

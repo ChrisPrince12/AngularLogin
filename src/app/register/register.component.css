@@ -5,3 +5,7 @@
     color: rgb(0, 97, 235);
     font-weight: bold;
 }
+.is-invalid {
+    border-color: red !important;
+  }
+  
