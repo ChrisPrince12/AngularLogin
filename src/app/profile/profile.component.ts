@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AuthenticationService } from '../service/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../model/user.model';
-import { HttpClient, HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
@@ -23,6 +23,11 @@ export class ProfileComponent {
   passwordMismatch = false;
   profileForm: any;
   showPassword: boolean = false;
+  profileLetter: string = 'P';
+  invalidCurrentPassword: boolean = false
+
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
+
   private springUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient,private authService: AuthenticationService,private formBuilder: FormBuilder,private router: Router,private datePipe: DatePipe){}
@@ -34,6 +39,9 @@ export class ProfileComponent {
     this.authService.getUserData().subscribe(
       (userData) => {
         this.userData = userData
+        if(this.userData?.firstName){
+          this.profileLetter = this.userData.firstName.charAt(0).toUpperCase();
+        }
         this.formatUserData()
       }
     )
@@ -69,6 +77,7 @@ export class ProfileComponent {
 
   /////End Of Init Method
 
+
   formatDateForInput(date: string | undefined): string {
     if (!date) {
       return '';
@@ -78,33 +87,16 @@ export class ProfileComponent {
   }
 
   //Handling Password Change
-  onSubmit(): void {
-    if (this.passwordChangeForm.invalid || this.passwordMismatch) {
-      return;
+  get formControls() {
+    return this.passwordChangeForm.controls;
+  }
+
+  checkPasswordValidity(){
+    if (this.formControls.newPassword.value && this.formControls.newPassword.value.length < 6) {
+      this.passwordChangeForm.get('newPassword')?.setErrors({ minlength: true });
+    } else {
+      this.passwordChangeForm.get('newPassword')?.setErrors(null);
     }
-
-    const currentPassword = this.passwordChangeForm.get('currentPassword').value;
-    const newPassword = this.passwordChangeForm.get('newPassword').value;
-
-    this.authService.getUserData().subscribe( user => {
-      if(user){
-        const userEmail = user.email
-        
-        this.authService.updatePassword(userEmail,currentPassword,newPassword).subscribe(
-          () => {
-            if(HttpStatusCode.Ok){
-              console.log("Password Updated Successfully");
-              this.passwordChangeForm.reset();
-              this.router.navigateByUrl('/dashboard');
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
-      }
-    })
-    
   }
 
   passwordsDoNotMatch(): boolean {
@@ -125,6 +117,39 @@ export class ProfileComponent {
     return this.passwordChangeForm.get('confirmPassword');
   }
 
+  onSubmit(): void {
+    if (this.passwordChangeForm.invalid || this.passwordMismatch) {
+      return;
+    }
+
+    const currentPassword = this.passwordChangeForm.get('currentPassword').value;
+    const newPassword = this.passwordChangeForm.get('newPassword').value;
+
+    this.authService.getUserData().subscribe( user => {
+      if(user){
+        const userEmail = user.email
+        this.authService.updatePassword(userEmail,currentPassword,newPassword).subscribe(
+          () => {
+            if(HttpStatusCode.Ok){
+              console.log("Password Updated Successfully");
+              this.passwordChangeForm.reset();
+              this.router.navigateByUrl('/dashboard');
+            }
+          },
+          (error) => {
+            if(error instanceof HttpErrorResponse){
+              if(error.error == "Invalid current password"){
+                this.invalidCurrentPassword = true
+                this.passwordInput.nativeElement.focus();
+              }
+            }
+            console.log(error);
+          }
+        )
+      }
+    })
+    
+  }
   //End Of Password Change
 
   //Handling Update Profile
@@ -182,61 +207,61 @@ export class ProfileComponent {
 
 
   //Handling Profile Picture Update
-  onFileSelected(event: any): void{
-    this.selectedFile = event.target.files[0];
-  }
+  // onFileSelected(event: any): void{
+  //   this.selectedFile = event.target.files[0];
+  // }
 
-  uploadProfilePicture(): void{
-    if(!this.selectedFile){
-      return;
-    }
+  // uploadProfilePicture(): void{
+  //   if(!this.selectedFile){
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-    formData.append('userEmail', String(this.userData?.email))
+  //   const formData = new FormData();
+  //   formData.append('file', this.selectedFile);
+  //   formData.append('userEmail', String(this.userData?.email))
 
-    this.http.post(`${this.springUrl}/profile/upload`, formData , { responseType: "text"}).subscribe(
-      (response: string) => {
+  //   this.http.post(`${this.springUrl}/profile/upload`, formData , { responseType: "text"}).subscribe(
+  //     (response: string) => {
 
-        console.log('Profile Picture Uploaded Successfully');
+  //       console.log('Profile Picture Uploaded Successfully');
 
-        this.fetchProfilePictureUrl(String(this.userData?.email));
-      },
-      (error) => {
-        console.log('Fail to upload', error);
-      }
-    )
-  }
+  //       this.fetchProfilePictureUrl(String(this.userData?.email));
+  //     },
+  //     (error) => {
+  //       console.log('Fail to upload', error);
+  //     }
+  //   )
+  // }
 
-  private fetchProfilePictureUrl(userEmail: string): void{
-      this.http.get<any>(`${this.springUrl}/profile/picture/${userEmail}`).subscribe(
-        (response) => {
+  // private fetchProfilePictureUrl(userEmail: string): void{
+  //     this.http.get<any>(`${this.springUrl}/profile/picture/${userEmail}`).subscribe(
+  //       (response) => {
 
-          this.profilePictureUrl = response.pictureUrl
+  //         this.profilePictureUrl = response.pictureUrl
 
-          const imageBase64 = response.imageData;
-          const imageBlob = this.dataURItoBlob(imageBase64);
-          this.profilePicture = URL.createObjectURL(imageBlob);
+  //         const imageBase64 = response.imageData;
+  //         const imageBlob = this.dataURItoBlob(imageBase64);
+  //         this.profilePicture = URL.createObjectURL(imageBlob);
           
-          this.router.navigateByUrl('/profile');
-        },
-        (error) => {
-          this.router.navigateByUrl('/profile');
-          console.error('Error Fetching Profile URL: ', error);
-        }
-      )
-  }
+  //         this.router.navigateByUrl('/profile');
+  //       },
+  //       (error) => {
+  //         this.router.navigateByUrl('/profile');
+  //         console.error('Error Fetching Profile URL: ', error);
+  //       }
+  //     )
+  // }
 
-  dataURItoBlob(dataURI: string): Blob {
-    const byteString = atob(dataURI.split(',')[1]);
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  }
+  // dataURItoBlob(dataURI: string): Blob {
+  //   const byteString = atob(dataURI.split(',')[1]);
+  //   const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  //   const ab = new ArrayBuffer(byteString.length);
+  //   const ia = new Uint8Array(ab);
+  //   for (let i = 0; i < byteString.length; i++) {
+  //     ia[i] = byteString.charCodeAt(i);
+  //   }
+  //   return new Blob([ab], { type: mimeString });
+  // }
   
   //End Of Handling Profile Picture
 

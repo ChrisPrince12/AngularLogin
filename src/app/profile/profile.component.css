@@ -10,3 +10,6 @@
 .input-group input {
 border-right: none;
 }
+.text-sm{
+  font-size: 14px;
+}

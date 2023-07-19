@@ -27,7 +27,7 @@ export class DashboardComponent {
       this.showSuccessAlert = true
       setTimeout(()=>{
         this.showSuccessAlert = false
-      },4000)
+      },2000)
     });
     this.getAllUser();
   }

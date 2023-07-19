@@ -1,18 +1,34 @@
 <div *ngIf="isLogin">
   <div class="container p-4">
     <div class="row g-2">
-      <div class="col-md-4">
+      <div class="col-md-4 profile-sizing">
         <div class="card shadow align-items-center">
           <div *ngIf="!profilePicture">
-            <svg class="card-img-top profile-picture" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <svg
+              class="card-img-top profile-picture"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
               <circle fill="#555" cx="12" cy="12" r="10" />
-              <text x="50%" y="65%" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
-          </svg>
-          
+              <text
+                x="50%"
+                y="65%"
+                font-size="12"
+                font-weight="bold"
+                text-anchor="middle"
+                fill="#fff"
+              >
+                {{ profileLetter }}
+              </text>
+            </svg>
           </div>
 
           <div *ngIf="profilePicture">
-            <img class="card-img-top profile-picture" [src]="profilePicture" alt="profile-picture" />
+            <img
+              class="card-img-top profile-picture"
+              [src]="profilePicture"
+              alt="profile-picture"
+            />
           </div>
 
           <!-- <div class="edit-overlay">
@@ -27,7 +43,6 @@
               <i class="bi bi-check"></i>
             </button>
           </div> -->
-
         </div>
       </div>
 
@@ -57,7 +72,11 @@
               </div>
             </div>
             <div class="d-grid gap-2 pt-2">
-              <button class="btn btn-primary" type="button" (click)="toggleEditMode()">
+              <button
+                class="btn btn-primary"
+                type="button"
+                (click)="toggleEditMode()"
+              >
                 Update Profile<i class="bi bi-pencil-square"></i>
               </button>
             </div>
@@ -67,34 +86,67 @@
             <!-- Display the edit form -->
             <h3>Update Profile</h3>
             <hr />
-            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="row g-3">
+            <form
+              [formGroup]="profileForm"
+              (ngSubmit)="updateProfile()"
+              class="row g-3"
+            >
               <div class="col-md-6">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" formControlName="firstName" required />
-                <div *ngIf="
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  formControlName="firstName"
+                  required
+                />
+                <div
+                  *ngIf="
                     profileForm.get('firstName').invalid &&
                     profileForm.get('firstName').touched
-                  " class="text-danger">
+                  "
+                  class="text-danger"
+                >
                   First Name is required.
                 </div>
               </div>
               <div class="col-md-6">
                 <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" formControlName="lastName" required />
-                <div *ngIf="
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  formControlName="lastName"
+                  required
+                />
+                <div
+                  *ngIf="
                     profileForm.get('lastName').invalid &&
                     profileForm.get('lastName').touched
-                  " class="text-danger">
+                  "
+                  class="text-danger"
+                >
                   Last Name is required.
                 </div>
               </div>
               <div class="col-md-6">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" formControlName="email" aria-label="readonly" readonly />
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  aria-label="readonly"
+                  readonly
+                />
               </div>
               <div class="col-md-6">
                 <label for="gender">Gender</label>
-                <select class="form-control" id="gender" formControlName="gender">
+                <select
+                  class="form-control"
+                  id="gender"
+                  formControlName="gender"
+                >
                   <option value="" disabled selected>Select your gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -102,23 +154,42 @@
               </div>
               <div class="col-md-6">
                 <label for="birthdate">Birthdate</label>
-                <input type="date" class="form-control" id="birthdate" formControlName="birthdate" />
+                <input
+                  type="date"
+                  class="form-control"
+                  id="birthdate"
+                  formControlName="birthdate"
+                />
               </div>
               <div class="col-md-6">
                 <label for="mobile">Mobile</label>
-                <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile number"
-                  formControlName="mobile" />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  formControlName="mobile"
+                />
               </div>
               <div class="col-md-12">
                 <label for="address">Address</label>
-                <textarea class="form-control" id="address" rows="3" formControlName="address"></textarea>
+                <textarea
+                  class="form-control"
+                  id="address"
+                  rows="3"
+                  formControlName="address"
+                ></textarea>
               </div>
               <div class="m-2 d-flex justify-content-center">
                 <!-- In Case [disabled]="profileForm.invalid" -->
                 <button type="submit" class="btn btn-primary">
                   Save Changes
                 </button>
-                <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="toggleEditMode()"
+                >
                   Cancel
                 </button>
               </div>
@@ -130,63 +201,135 @@
       <div class="card shadow p-4 my-2">
         <h4>Change Your Password</h4>
 
-        <form [formGroup]="passwordChangeForm" (ngSubmit)="onSubmit()" class="row g-3">
+        <form
+          [formGroup]="passwordChangeForm"
+          (ngSubmit)="onSubmit()"
+          class="row g-3"
+        >
           <div class="col-md-4">
             <div class="form-group">
-            <label for="currentPassword">Current Password</label>
-            <div class="input-group">
-            <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" autocomplete="current-password" id="currentPassword"
-              formControlName="currentPassword" placeholder="Enter current password" />
-              <span class="input-group-text toggle-password bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"
-              (click)="togglePasswordVisibility()"></span>
-            </div>
-            <div *ngIf="currentPassword.touched && currentPassword.errors">
-              <div *ngIf="currentPassword.errors.required" class="text-danger">
-                Current Password is required.
+              <label for="currentPassword">Current Password</label>
+              <div class="input-group">
+                <input
+                  type="{{ showPassword ? 'text' : 'password' }}"
+                  class="form-control"
+                  autocomplete="current-password"
+                  id="currentPassword"
+                  formControlName="currentPassword"
+                  placeholder="Enter current password"
+                  [ngClass]="{ 'is-invalid': invalidCurrentPassword }"
+                  #passwordInput
+                />
+                <span
+                  class="input-group-text toggle-password bi"
+                  [class.bi-eye-fill]="!showPassword"
+                  [class.bi-eye-slash-fill]="showPassword"
+                  (click)="togglePasswordVisibility()"
+                ></span>
               </div>
-            </div>
+              <div *ngIf="invalidCurrentPassword" class="text-danger text-sm">Invalid current password. Please try again.</div>
+              <div *ngIf="currentPassword.touched && currentPassword.errors">
+                <div
+                  *ngIf="currentPassword.errors.required"
+                  class="text-danger text-sm"
+                >
+                  Current Password is required.
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-            <label for="newPassword">New Password</label>
-            
-            <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" autocomplete="new-password" id="newPassword"
-              formControlName="newPassword" placeholder="Enter new password" />
-              
-            <div *ngIf="newPassword.touched && newPassword.errors" class="text-danger">
-              <div *ngIf="newPassword.errors.required" class="text-danger">
-                New Password is required.
+              <label for="newPassword">New Password</label>
+
+              <input
+                type="{{ showPassword ? 'text' : 'password' }}"
+                class="form-control"
+                autocomplete="new-password"
+                id="newPassword"
+                formControlName="newPassword"
+                placeholder="Enter new password"
+                [ngClass]="{
+                  'is-invalid':
+                    formControls.newPassword.invalid &&
+                    (formControls.newPassword.dirty ||
+                      formControls.newPassword.touched),
+                  'less-than-six':
+                    formControls.newPassword.value &&
+                    formControls.newPassword.value.length < 6
+                }"
+                (keyup)="checkPasswordValidity()"
+                data-toggle="tooltip"
+                data-placement="right"
+                title="Password must be at least six characters"
+              />
+
+              <div
+                *ngIf="newPassword.touched && newPassword.errors"
+                class="text-danger text-sm"
+              >
+                <div
+                  *ngIf="newPassword.errors.required"
+                  class="text-danger text-sm"
+                >
+                  New Password is required.
+                </div>
+                <div
+                  *ngIf="newPassword.errors.minlength"
+                  class="text-danger text-sm"
+                >
+                  New Password must be at least 6 characters long.
+                </div>
               </div>
-              <div *ngIf="newPassword.errors.minlength" class="text-danger">
-                New Password must be at least 6 characters long.
-              </div>
-            </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <div class="input-group">
-            <input type="{{ showPassword ? 'text' : 'password' }}" autocomplete="new-password" class="form-control" id="confirmPassword"
-              formControlName="confirmPassword" placeholder="Confirm new password" />
-              <span class="input-group-text toggle-password bi" [class.bi-eye-fill]="!showPassword" [class.bi-eye-slash-fill]="showPassword"
-              (click)="togglePasswordVisibility()"></span>
-            </div>
-            <div *ngIf="confirmPassword.touched && confirmPassword.errors">
-              <div *ngIf="confirmPassword.errors.required" class="text-danger">
-                Confirm Password is required.
+              <label for="confirmPassword">Confirm Password</label>
+              <div class="input-group">
+                <input
+                  type="{{ showPassword ? 'text' : 'password' }}"
+                  autocomplete="new-password"
+                  class="form-control"
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  placeholder="Confirm new password"
+                  [ngClass]="{ 'is-invalid': passwordMismatch }"
+                  data-toggle="tooltip"
+                  data-placement="right"
+                  title="Passwords do not match"
+                />
+                <span
+                  class="input-group-text toggle-password bi"
+                  [class.bi-eye-fill]="!showPassword"
+                  [class.bi-eye-slash-fill]="showPassword"
+                  (click)="togglePasswordVisibility()"
+                ></span>
               </div>
-              <div *ngIf="confirmPassword.errors.minlength" class="text-danger">
-                Confirm Password must be at least 6 characters long.
+              <div *ngIf="confirmPassword.touched && confirmPassword.errors">
+                <div
+                  *ngIf="confirmPassword.errors.required"
+                  class="text-danger text-sm"
+                >
+                  Confirm Password is required.
+                </div>
+                <div
+                  *ngIf="confirmPassword.errors.minlength"
+                  class="text-danger text-sm"
+                >
+                  Confirm Password must be at least 6 characters long.
+                </div>
+                <div *ngIf="passwordMismatch" class="text-danger text-sm">
+                  Passwords do not match.
+                </div>
               </div>
-              <div *ngIf="passwordMismatch" class="text-danger">
-                Passwords do not match.
-              </div>
-            </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" [disabled]="passwordChangeForm.invalid">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="passwordChangeForm.invalid || passwordMismatch"
+          >
             Change Password
           </button>
         </form>
